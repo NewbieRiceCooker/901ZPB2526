@@ -73,23 +73,28 @@ void competition_initialize() {}
 void autonomous() {
 
 	chassis.setPose(0, 0, 0);
-	chassis.moveToPoint(0,32,1000);
+	chassis.moveToPoint(0,31,1000);
 	chassis.turnToHeading(270,1000); //turn left towards the loader mech
+
 	pros::delay(500);
 	loaderPiston.toggle();
+	
 	pros::delay(500);
-	chassis.moveToPoint(-50,32,1000);
+	chassis.moveToPoint(-50,31,1000);
 	setIntake(127); //intake
 	pros::delay(1250);
-	chassis.moveToPoint(13,30,1000, {.forwards=false,.maxSpeed = 64});
+	chassis.moveToPoint(20,28,1000, {.forwards=false,.maxSpeed = 64});
 	pros::delay(1000);
 	setIntake(127);
-	setScoring(127);
+	setScoring(60);
 	pros::delay(5000);
 	setIntake(0);
 	setScoring(0);
-	chassis.moveToPoint(0,30,1000, {.maxSpeed = 64});
-	chassis.moveToPoint(35,30,1000, {.forwards=false});
+	chassis.moveToPoint(0,28,1000, {.maxSpeed = 64});
+	chassis.moveToPoint(35,28,1000, {.forwards=false});
+	
+	
+	
 	
 
 

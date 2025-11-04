@@ -26,7 +26,7 @@ lemlib::OdomSensors sensors(&vertical_tracking_wheel, // vertical tracking wheel
                             &imu // inertial sensor
                             );
 
-lemlib::ControllerSettings lateral_controller(11, // proportional gain (kP)
+lemlib::ControllerSettings lateral_controller(8.5, // proportional gain (kP)
                                               0, // integral gain (kI)
                                               50, // derivative gain (kD)
                                               0, // anti windup
