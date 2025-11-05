@@ -2,6 +2,7 @@
 #include "robodash/api.h"
 #include "helpers.hpp"
 #include "globals.hpp"
+#include "auton.hpp"
 
 /**
  * A callback function for LLEMU's center button.
@@ -72,7 +73,10 @@ void competition_initialize() {}
  */
 void autonomous() {
 
-	chassis.setPose(0, 0, 0);
+
+
+	//below is the code for working 4 block auton on the long goal
+	/*chassis.setPose(0, 0, 0);
 	chassis.moveToPoint(0,31,1000);
 	chassis.turnToHeading(270,1000); //turn left towards the loader mech
 
@@ -92,6 +96,8 @@ void autonomous() {
 	setScoring(0);
 	chassis.moveToPoint(0,28,1000, {.maxSpeed = 64});
 	chassis.moveToPoint(35,28,1000, {.forwards=false});
+	*/
+	left7block();
 	
 	
 	
