@@ -97,8 +97,10 @@ void autonomous() {
 	chassis.moveToPoint(0,28,1000, {.maxSpeed = 64});
 	chassis.moveToPoint(35,28,1000, {.forwards=false});
 	*/
-	left7block();
 	
+	
+	left7block();
+	//skillsAuton();
 	
 	
 	
@@ -148,8 +150,13 @@ void opcontrol() {
 		else if(master.get_digital(DIGITAL_R2)){
 			setIntake(127); //spin motor to intake
 		}
+		else if (master.get_digital(DIGITAL_X)){
+			setIntake(127);
+			middlePiston.retract();
+		}		
 		else{
 			setIntake(0);
+			middlePiston.extend();
 		}
 
 		//score mech code
@@ -163,14 +170,11 @@ void opcontrol() {
 		else{
 			setScoring(0);
 		}
-		//loader is X, middle Y
 
-		if (master.get_digital(DIGITAL_X)){
-			loaderPiston.toggle();
-			pros::delay(500);
-		}
+
+		
 		if (master.get_digital(DIGITAL_Y)){
-			middlePiston.toggle();
+			loaderPiston.toggle();
 			pros::delay(500);
 		}
 	}
