@@ -1,5 +1,6 @@
 #include "main.h"
 #include "lemlib/api.hpp"
+#include "liblvgl/lvgl.h"
 
 extern pros::MotorGroup left_motors;
 extern pros::MotorGroup right_motors; 
@@ -27,5 +28,29 @@ extern lemlib::Chassis chassis;
 extern pros::Motor intakeMotor;
 extern pros::Motor scoringMotor;
 
+extern pros::Motor leftFrontMotor;
+extern pros::Motor leftBottomMotor;
+extern pros::Motor leftTopMotor;
+extern pros::Motor rightFrontMotor;
+extern pros::Motor rightBottomMotor;
+extern pros::Motor rightTopMotor;
+
 extern pros::adi::Pneumatics loaderPiston;
 extern pros::adi::Pneumatics middlePiston;
+extern pros::adi::Pneumatics wingPiston;
+
+extern int autonomousPreSet;
+
+extern lv_obj_t * autonomousSubtitle;
+extern lv_obj_t * labelCoords;
+extern lv_obj_t * labelTemps;
+
+
+extern int countdownValue; //3 second countdown
+extern lv_obj_t * countdownLabel;
+
+extern int autonState;       // 0: Idle, 1: Countdown, 2: Running
+extern int countdownValue;   // The 3-2-1 before start
+extern int gameTimer;        // The match/skills clock
+
+

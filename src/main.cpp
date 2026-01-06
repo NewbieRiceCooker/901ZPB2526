@@ -1,8 +1,10 @@
 #include "main.h"
-#include "robodash/api.h"
 #include "helpers.hpp"
 #include "globals.hpp"
 #include "auton.hpp"
+#include "ui.hpp"
+
+
 
 /**
  * A callback function for LLEMU's center button.
@@ -20,6 +22,7 @@ void on_center_button() {
 	}
 }
 
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -27,19 +30,143 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+	
+
+	//LBVL
+	/**/
+
+
+    chassis.calibrate(); // calibrate sensors
+
+
+	lv_main_menu();
+	//LCD PROS
+	/*
+
 	pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
-    // print position to brain screen
+	*/
+
+
     pros::Task screen_task([&]() {
+		pros::delay(500);
         while (true) {
-            // print robot location to the brain screen
+
+
+			//PROS LCD
+
+			/*
+			// print robot location to the brain screen
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             // delay to save resources
             pros::delay(20);
+			*/
+			
+		
+
+
+			//LBVL
+			
+
+			
+			if (labelCoords != nullptr) {
+
+				char buffer[100];
+				lemlib::Pose pose = chassis.getPose();
+				snprintf(buffer, sizeof(buffer), "POSITION:\nX: %.2f\nY: %.2f\nTheta: %.2f", 
+				pose.x, pose.y, pose.theta);
+
+				
+				lv_label_set_text(labelCoords, buffer);
+			}
+
+			if (labelTemps != nullptr) {
+				char tempBuf[300]; 
+
+				// Assuming you have defined these motor names in globals.hpp
+				// Drive Left (3 motors)
+				double L1 = leftFrontMotor.get_temperature();
+				double L2 = leftTopMotor.get_temperature();
+				double L3 = leftBottomMotor.get_temperature();
+
+				// Drive Right (3 motors)
+				double R1 = rightFrontMotor.get_temperature();
+				double R2 = rightTopMotor.get_temperature();
+				double R3 = rightBottomMotor.get_temperature();
+
+				// Subsystems (2 motors)
+				double mIntake = intakeMotor.get_temperature();
+				double mScoring = scoringMotor.get_temperature();
+
+				// Format as a grid for readability
+				snprintf(tempBuf, sizeof(tempBuf), 
+						"FRONTL: %.0fC | FRONTR: %.0fC\n"
+						"TOPL:   %.0fC | TOPR:   %.0fC\n"
+						"BACKL:  %.0fC | BACKR:  %.0fC\n"
+						"INTAKE: %.0fC | SCORE: %.0fC",
+						L1, R1, L2, R2, L3, R3, mIntake, mScoring);
+
+				lv_label_set_text(labelTemps, tempBuf);
+
+				// --- RED ALERT LOGIC ---
+				// Checks if ANY of the 8 motors are overheating
+				if (L1 > 55 || L2 > 55 || L3 > 55 || R1 > 55 || R2 > 55 || R3 > 55 || mIntake > 55 || mScoring > 55) {
+					lv_obj_set_style_text_color(labelTemps, lv_palette_main(LV_PALETTE_RED), 0);
+				} else {
+					lv_obj_set_style_text_color(labelTemps, lv_palette_main(LV_PALETTE_NONE), 0);
+				}
+			}
+
+			//AUTONOMOUS STATE LOGIC
+			if (pros::competition::is_connected()){
+				lv_label_set_text(countdownLabel, "FIELD CONTROL ACTIVE");
+				lv_obj_set_style_text_color(countdownLabel, lv_palette_main(LV_PALETTE_BLUE), 0);
+				autonState = 0;
+			}
+			else if (autonState == 0) { // IDLE
+            lv_label_set_text(countdownLabel, "STATUS: Not Active");
+            lv_obj_set_style_text_color(countdownLabel, lv_palette_main(LV_PALETTE_GREY), 0);
+			} 
+			else if (autonState == 1) { // 3-2-1 COUNTDOWN
+				if (countdownValue > 0) {
+					lv_label_set_text_fmt(countdownLabel, "READY... %d", countdownValue);
+					lv_obj_set_style_text_color(countdownLabel, lv_palette_main(LV_PALETTE_ORANGE), 0);
+					countdownValue--;
+					pros::delay(1000); 
+					continue; 
+				} else {
+					autonState = 2;
+					// Start the robot movement in the background
+					pros::Task run_auton([](){ autonomous(); });
+				}
+			} 
+			else if (autonState == 2) { // MATCH TIMER
+				if (gameTimer > 0) {
+					lv_label_set_text_fmt(countdownLabel, "RUNNING: %d:%02d", gameTimer/60, gameTimer%60);
+					lv_obj_set_style_text_color(countdownLabel, lv_palette_main(LV_PALETTE_GREEN), 0);
+					gameTimer--;
+					pros::delay(1000);
+					continue;
+				} else {
+					// --- STOP ALL MOVEMENT AT 0 SECONDS ---
+					leftFrontMotor.brake(); leftTopMotor.brake(); leftBottomMotor.brake();
+					rightFrontMotor.brake(); rightTopMotor.brake(); rightBottomMotor.brake();
+					intakeMotor.brake(); scoringMotor.brake();
+					
+					lv_label_set_text(countdownLabel, "TIME UP - STOPPED");
+					lv_obj_set_style_text_color(countdownLabel, lv_palette_main(LV_PALETTE_RED), 0);
+					pros::delay(2000);
+					autonState = 0;
+				}
+			}
+			pros::delay(100);
+				
+			
         }
     });
+	
 }
 
 /**
@@ -74,38 +201,37 @@ void competition_initialize() {}
 void autonomous() {
 
 
+	left7block();
+	//skillsAuton();
+	//parkSkillsAuton();
 
-	//below is the code for working 4 block auton on the long goal
-	/*chassis.setPose(0, 0, 0);
-	chassis.moveToPoint(0,31,1000);
-	chassis.turnToHeading(270,1000); //turn left towards the loader mech
-
-	pros::delay(500);
-	loaderPiston.toggle();
-	
-	pros::delay(500);
-	chassis.moveToPoint(-50,31,1000);
-	setIntake(127); //intake
-	pros::delay(1250);
-	chassis.moveToPoint(20,28,1000, {.forwards=false,.maxSpeed = 64});
-	pros::delay(1000);
-	setIntake(127);
-	setScoring(60);
-	pros::delay(5000);
-	setIntake(0);
-	setScoring(0);
-	chassis.moveToPoint(0,28,1000, {.maxSpeed = 64});
-	chassis.moveToPoint(35,28,1000, {.forwards=false});
+	/*
+	chassis.moveToPoint(0,24,9999);	
+	chassis.moveToPoint(0,0,9999, {.forwards=false});
 	*/
 	
 	
-	left7block();
-	//skillsAuton();
-	
-	
+	//chassis.turnToHeading(180,9999);
+	/*
+	creation for a autonselector code should go hear, with switch statements relating the autonomousPreSet int variable;
 	
 
 
+	switch (autonomousPreSet){
+		case 1:
+		left7block();
+		break;
+
+		case 9:
+		skillsAuton();
+		break;
+
+		default:
+		break;
+
+	}
+		
+	*/
 
 }
 
@@ -150,9 +276,8 @@ void opcontrol() {
 		else if(master.get_digital(DIGITAL_R2)){
 			setIntake(127); //spin motor to intake
 		}
-		else if (master.get_digital(DIGITAL_X)){
-			setIntake(127);
-			middlePiston.retract();
+		else if (master.get_digital(DIGITAL_RIGHT)){
+			wingPiston.toggle();
 		}		
 		else{
 			setIntake(0);
@@ -162,7 +287,8 @@ void opcontrol() {
 		//score mech code
 		
 		if (master.get_digital(DIGITAL_L1)){
-			setScoring(-127);
+			setIntake(127);
+			middlePiston.retract();
 		}
 		else if(master.get_digital(DIGITAL_L2)){
 			setScoring(127);
@@ -172,10 +298,10 @@ void opcontrol() {
 		}
 
 
-		
-		if (master.get_digital(DIGITAL_Y)){
-			loaderPiston.toggle();
-			pros::delay(500);
+		 
+		if (master.get_digital_new_press(DIGITAL_Y)){ //on click of the button, not holding.
+			loaderPiston.toggle(); 
 		}
+
 	}
 }
