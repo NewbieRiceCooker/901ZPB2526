@@ -22,12 +22,12 @@ lemlib::TrackingWheel vertical_tracking_wheel(&vertical_sensor, lemlib::Omniwhee
 
 lemlib::OdomSensors sensors(&vertical_tracking_wheel, // vertical tracking wheel 1, set to null
                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
-                            &horizontal_tracking_wheel, // horizontal tracking wheel 1
+                            nullptr, // horizontal tracking wheel 1horizontal_tracking_wheel
                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
                             &imu // inertial sensor
                             );
 
-lemlib::ControllerSettings lateral_controller(9, // proportional gain (kP)
+lemlib::ControllerSettings lateral_controller(5.5, // proportional gain (kP)
                                               0, // integral gain (kI)
                                               40, // derivative gain (kD)
                                               0, // anti windup

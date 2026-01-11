@@ -276,18 +276,20 @@ void opcontrol() {
 		else if(master.get_digital(DIGITAL_R2)){
 			setIntake(127); //spin motor to intake
 		}
-		else if (master.get_digital(DIGITAL_RIGHT)){
-			wingPiston.toggle();
-		}		
+		
 		else{
 			setIntake(0);
 			middlePiston.extend();
 		}
+		if (master.get_digital_new_press(DIGITAL_RIGHT)){
+			wingPiston.toggle();
+		}		
 
 		//score mech code
 		
 		if (master.get_digital(DIGITAL_L1)){
 			setIntake(127);
+			setScoring(127);
 			middlePiston.retract();
 		}
 		else if(master.get_digital(DIGITAL_L2)){

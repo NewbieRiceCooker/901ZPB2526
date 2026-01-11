@@ -106,7 +106,7 @@ void lv_main_menu(void){
     // 2. Start Button
     lv_obj_t * btnStart = lv_btn_create(tabAuton);
     lv_obj_set_size(btnStart, 120, 50);
-    lv_obj_align(btnStart, LV_ALIGN_CENTER, -70, 20);
+    lv_obj_align(btnStart, LV_ALIGN_CENTER, -100, 20);
     lv_obj_add_event_cb(btnStart, startAutonEvent, LV_EVENT_CLICKED, NULL);
     lv_obj_set_style_bg_color(btnStart, lv_palette_main(LV_PALETTE_GREEN), 0);
     

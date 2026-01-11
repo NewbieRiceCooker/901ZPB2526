@@ -6,38 +6,29 @@ void left7block(){
     
     chassis.setPose(57.5,22,0);
     setIntake(127);
-    chassis.moveToPoint(49.5,49,3000,{.maxSpeed=35}); //overshooting, because getting two blocks. potentially need to move back.
+    chassis.moveToPoint(49.5,49,600,{},false); //overshooting, because getting two blocks. potentially need to move back.
+    loaderPiston.toggle();
     chassis.turnToHeading(-134,1000);
-    chassis.moveToPose(57,56,-134,2000,{.forwards=false,.horizontalDrift=0.8, .maxSpeed=90},false);
+    chassis.moveToPoint(56,54,750,{.forwards=false,.maxSpeed=90},false); //55,54 was undershooting but still scoring
     middlePiston.toggle(); //middle piston extend
     setScoring(68);
     pros::delay(1500);
     middlePiston.toggle(); //middle piston retract
     setScoring(0);
-    chassis.moveToPoint(17,20,2000,{.maxSpeed=60}); //still possibly overshooting?
+    chassis.moveToPoint(15,20,1500,{}); //still possibly overshooting?
     setIntake(0);
-    chassis.turnToHeading(180,1000);
-    loaderPiston.toggle();
+    chassis.turnToHeading(180,500);
     setIntake(127);
-    chassis.moveToPoint(18,-6,1000,{.maxSpeed=50});
-    chassis.moveToPoint(18,6,500,{.maxSpeed=50});
-    chassis.moveToPoint(18,-6,500,{.maxSpeed=50});
-    chassis.moveToPoint(19,35,1000,{.forwards=false, .maxSpeed=100},false);
-    
-    
-    
+    chassis.moveToPoint(15,-8,1250,{.maxSpeed=50});
+    chassis.moveToPoint(18,35,1500,{.forwards=false},false);
     setScoring(127);
-    pros::delay(200);
-    setIntake(-10);
-    pros::delay(100);
-    setIntake(127);
-    
-    
-    
-    
-    
-    
+    pros::delay(1500);
+    chassis.moveToPoint(20,10,500,{},false);
+    chassis.moveToPoint(32,20,250,{.forwards=false},false);
+    chassis.moveToPoint(32,47,4000,{.forwards=false},false);
 }
+
+
 void skillsAuton(){
     chassis.setPose(92,28,90);
     loaderPiston.toggle();
