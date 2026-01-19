@@ -27,26 +27,26 @@ lemlib::OdomSensors sensors(&vertical_tracking_wheel, // vertical tracking wheel
                             &imu // inertial sensor
                             );
 
-lemlib::ControllerSettings lateral_controller(5.5, // proportional gain (kP)
+lemlib::ControllerSettings lateral_controller(7, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              40, // derivative gain (kD)
+                                              65, // derivative gain (kD)
                                               0, // anti windup
-                                              0, // small error range, in inches
-                                              0, // small error range timeout, in milliseconds
-                                              0, // large error range, in inches
-                                              0, // large error range timeout, in milliseconds
+                                              0.5, // small error range, in inches
+                                              100, // small error range timeout, in milliseconds
+                                              2, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
                                               0 // maximum acceleration (slew)
 );
 
 // angular PID controller
-lemlib::ControllerSettings angular_controller(3, // proportional gain (kP)
-                                              0, // integral gain (kI)
-                                              30, // derivative gain (kD)
+lemlib::ControllerSettings angular_controller(3.0, // proportional gain (kP)
+                                              0.001, // integral gain (kI)
+                                              45, // derivative gain (kD)
                                               0, // anti windup
-                                              0, // small error range, in degrees
+                                              0.5, // small error range, in degrees
                                               0, // small error range timeout, in milliseconds
-                                              0, // large error range, in degrees
-                                              0, // large error range timeout, in milliseconds
+                                              3, // large error range, in degrees
+                                              500, // large error range timeout, in milliseconds
                                               0 // maximum acceleration (slew)
 );
 
@@ -65,15 +65,15 @@ pros::Motor scoringMotor(-6, pros::v5::MotorGears::blue);
 pros::Motor leftFrontMotor(-1, pros::v5::MotorGears::blue);
 pros::Motor leftBottomMotor(-2, pros::v5::MotorGears::blue);
 pros::Motor leftTopMotor(-3, pros::v5::MotorGears::blue);
-pros::Motor rightFrontMotor(-4, pros::v5::MotorGears::blue);
-pros::Motor rightBottomMotor(-5, pros::v5::MotorGears::blue);
-pros::Motor rightTopMotor(-6, pros::v5::MotorGears::blue);
+pros::Motor rightFrontMotor(8, pros::v5::MotorGears::blue);
+pros::Motor rightBottomMotor(9, pros::v5::MotorGears::blue);
+pros::Motor rightTopMotor(10, pros::v5::MotorGears::blue);
 
 pros::adi::Pneumatics middlePiston('A',true); 
 pros::adi::Pneumatics loaderPiston('B',false);
 pros::adi::Pneumatics wingPiston('C',false);
 
-int autonomousPreSet = 0;
+int autonomousPreSet = 8;
 
 
 lv_obj_t * labelCoords = NULL;

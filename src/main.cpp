@@ -102,10 +102,10 @@ void initialize() {
 
 				// Format as a grid for readability
 				snprintf(tempBuf, sizeof(tempBuf), 
-						"FRONTL: %.0fC | FRONTR: %.0fC\n"
-						"TOPL:   %.0fC | TOPR:   %.0fC\n"
-						"BACKL:  %.0fC | BACKR:  %.0fC\n"
-						"INTAKE: %.0fC | SCORE: %.0fC",
+						"FRONTL: %.0fC \n FRONTR: %.0fC\n"
+						"TOPL:   %.0fC \n TOPR:   %.0fC\n"
+						"BACKL:  %.0fC \n BACKR:  %.0fC\n"
+						"INTAKE: %.0fC \n SCORE: %.0fC",
 						L1, R1, L2, R2, L3, R3, mIntake, mScoring);
 
 				lv_label_set_text(labelTemps, tempBuf);
@@ -115,7 +115,7 @@ void initialize() {
 				if (L1 > 55 || L2 > 55 || L3 > 55 || R1 > 55 || R2 > 55 || R3 > 55 || mIntake > 55 || mScoring > 55) {
 					lv_obj_set_style_text_color(labelTemps, lv_palette_main(LV_PALETTE_RED), 0);
 				} else {
-					lv_obj_set_style_text_color(labelTemps, lv_palette_main(LV_PALETTE_NONE), 0);
+					lv_obj_set_style_text_color(labelTemps, lv_palette_main(LV_PALETTE_GREEN), 0);
 				}
 			}
 
@@ -139,7 +139,6 @@ void initialize() {
 				} else {
 					autonState = 2;
 					// Start the robot movement in the background
-					pros::Task run_auton([](){ autonomous(); });
 				}
 			} 
 			else if (autonState == 2) { // MATCH TIMER
@@ -151,9 +150,11 @@ void initialize() {
 					continue;
 				} else {
 					// --- STOP ALL MOVEMENT AT 0 SECONDS ---
+					/*
 					leftFrontMotor.brake(); leftTopMotor.brake(); leftBottomMotor.brake();
 					rightFrontMotor.brake(); rightTopMotor.brake(); rightBottomMotor.brake();
 					intakeMotor.brake(); scoringMotor.brake();
+					*/
 					
 					lv_label_set_text(countdownLabel, "TIME UP - STOPPED");
 					lv_obj_set_style_text_color(countdownLabel, lv_palette_main(LV_PALETTE_RED), 0);
@@ -201,7 +202,7 @@ void competition_initialize() {}
 void autonomous() {
 
 
-	left7block();
+	//left7block();
 	//skillsAuton();
 	//parkSkillsAuton();
 
@@ -212,14 +213,22 @@ void autonomous() {
 	
 	
 	//chassis.turnToHeading(180,9999);
-	/*
-	creation for a autonselector code should go hear, with switch statements relating the autonomousPreSet int variable;
+	
+	//creation for a autonselector code should go hear, with switch statements relating the autonomousPreSet int variable;
 	
 
 
 	switch (autonomousPreSet){
 		case 1:
 		left7block();
+		break;
+
+		case 3:
+		right7alleylongblock();
+		break;
+
+		case 8:
+		soloAWP();
 		break;
 
 		case 9:
@@ -231,7 +240,7 @@ void autonomous() {
 
 	}
 		
-	*/
+	
 
 }
 
@@ -257,9 +266,18 @@ void opcontrol() {
 
 
 	while (true) {
+
+		if (pros::competition::is_autonomous()) {
+            pros::delay(20);
+            continue;
+        }
+
+		
+
+		
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);  // Prints status of the emulated screen LCDs
+						(pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
+						(pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);  // Prints status of the emulated screen LCDs
 
 		// Arcade control scheme
 		int dir = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
@@ -300,10 +318,11 @@ void opcontrol() {
 		}
 
 
-		 
+		
 		if (master.get_digital_new_press(DIGITAL_Y)){ //on click of the button, not holding.
 			loaderPiston.toggle(); 
 		}
+		
 
 	}
 }
