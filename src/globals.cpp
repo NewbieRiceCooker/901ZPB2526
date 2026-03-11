@@ -27,15 +27,15 @@ lemlib::OdomSensors sensors(&vertical_tracking_wheel, // vertical tracking wheel
                             &imu // inertial sensor
                             );
 
-lemlib::ControllerSettings lateral_controller(7, // proportional gain (kP)
-                                              0, // integral gain (kI)
-                                              65, // derivative gain (kD)
-                                              0, // anti windup
+lemlib::ControllerSettings lateral_controller(10, // proportional gain (kP)
+                                              0.05, // integral gain (kI)
+                                              55, // derivative gain (kD)
+                                              3, // anti windup
                                               0.5, // small error range, in inches
-                                              100, // small error range timeout, in milliseconds
+                                              350, // small error range timeout, in milliseconds
                                               2, // large error range, in inches
                                               500, // large error range timeout, in milliseconds
-                                              0 // maximum acceleration (slew)
+                                              12 // maximum acceleration (slew)
 );
 
 // angular PID controller
@@ -73,7 +73,7 @@ pros::adi::Pneumatics middlePiston('A',true);
 pros::adi::Pneumatics loaderPiston('B',false);
 pros::adi::Pneumatics wingPiston('C',false);
 
-int autonomousPreSet = 8;
+int autonomousPreSet = 3;
 
 
 lv_obj_t * labelCoords = NULL;

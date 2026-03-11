@@ -36,6 +36,7 @@ void initialize() {
 	/**/
 
 
+	
     chassis.calibrate(); // calibrate sensors
 
 
@@ -220,7 +221,10 @@ void autonomous() {
 
 	switch (autonomousPreSet){
 		case 1:
-		left7block();
+		left7lateblock();
+		break;
+		case 2:
+		left4rush();
 		break;
 
 		case 3:
@@ -264,6 +268,8 @@ void opcontrol() {
 	pros::MotorGroup left_mg({-1, -2, -3});    // Creates a motor group with forwards ports 1 & 3 and reversed port 2
 	pros::MotorGroup right_mg({8, 9, 10});  // Creates a motor group with forwards port 5 and reversed ports 4 & 6
 
+	chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
+
 
 	while (true) {
 
@@ -288,36 +294,49 @@ void opcontrol() {
 
 		//intake code
 
-		if(master.get_digital(DIGITAL_R1)){
-			setIntake(-127); //outtake
-		} 
-		else if(master.get_digital(DIGITAL_R2)){
-			setIntake(127); //spin motor to intake
-		}
 		
-		else{
-			setIntake(0);
+		int intakePower = 0;
+		int scoringPower = 0;
+
+		// --- 1. INDEPENDENT SCORING LOGIC (L1 or L2) ---
+		if (master.get_digital(DIGITAL_L1)) {
+			scoringPower = 127;
+			intakePower = 127; // L1 overrides intake to help pull objects in
+			middlePiston.retract();
+		} 
+		else if (master.get_digital(DIGITAL_L2)) {
+			scoringPower = 127;
+			// We don't touch intakePower here, allowing the Intake logic below to run
+		} 
+		else {
+			scoringPower = 0;
+			// Only extend the piston if L1 isn't being used
 			middlePiston.extend();
 		}
+
+		// --- 2. INDEPENDENT INTAKE LOGIC (R1 or R2) ---
+		// We check if L1 is NOT pressed so that R1/R2 can work, 
+		// but L1 still has "priority" if you are doing a full score.
+		if (!master.get_digital(DIGITAL_L1)) {
+			if (master.get_digital(DIGITAL_R1)) {
+				intakePower = -127;
+			} 
+			else if (master.get_digital(DIGITAL_R2)) {
+				intakePower = 127;
+			} 
+			else {
+				intakePower = 0;
+			}
+		}
+
+		// 5. Finally, send the power to the motors ONCE
+		setIntake(intakePower);
+		setScoring(scoringPower);
+	
+	
 		if (master.get_digital_new_press(DIGITAL_RIGHT)){
 			wingPiston.toggle();
-		}		
-
-		//score mech code
-		
-		if (master.get_digital(DIGITAL_L1)){
-			setIntake(127);
-			setScoring(127);
-			middlePiston.retract();
-		}
-		else if(master.get_digital(DIGITAL_L2)){
-			setScoring(127);
-		}
-		else{
-			setScoring(0);
-		}
-
-
+		}	
 		
 		if (master.get_digital_new_press(DIGITAL_Y)){ //on click of the button, not holding.
 			loaderPiston.toggle(); 

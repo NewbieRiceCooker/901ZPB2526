@@ -34,6 +34,14 @@ static void skillsButtonEvent(lv_event_t * e){
     }
 }
 
+static void Left4RushEvent(lv_event_t * e){
+    lv_event_code_t code = lv_event_get_code(e);
+    if(code == LV_EVENT_CLICKED) {
+        autonomousPreSet = 2;
+        lv_label_set_text(autonomousSubtitle, "Selected: L4 Rush");
+    }
+}
+
 static void goAutonScreen(lv_event_t * e){
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_CLICKED) {
@@ -105,6 +113,16 @@ void lv_main_menu(void){
     lv_obj_t * rightSevenAlleyButtonLabel = lv_label_create(rightSevenAlleyButton);          /*Add a label to the button*/
     lv_label_set_text(rightSevenAlleyButtonLabel, "R7 Long Alley");                     /*Set the labels text*/
     lv_obj_center(rightSevenAlleyButtonLabel);
+
+    //Left 4 Rush
+
+    lv_obj_t * left4RushButton = lv_btn_create(tabAuton);     /*Add a button the current screen*/
+    lv_obj_set_pos(left4RushButton , 300, 0);                            /*Set its position*/
+    lv_obj_set_size(left4RushButton , 120, 50);                          /*Set its size*/
+    lv_obj_add_event_cb(left4RushButton , Left4RushEvent, LV_EVENT_ALL, NULL);         /*Assign a callback to the button*/
+    lv_obj_t * left4RushButtonLabel  = lv_label_create(left4RushButton );          /*Add a label to the button*/
+    lv_label_set_text(left4RushButtonLabel, "L4RUSH");                     /*Set the labels text*/
+    lv_obj_center(left4RushButtonLabel);
 
     //Skill Button
 
