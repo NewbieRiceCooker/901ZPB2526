@@ -2,38 +2,42 @@
 #include "globals.hpp"
 
 void setIntake(int intakePower){
-    intakeMotor.move(intakePower);
-}
-void setScoring(int scoringPower){
-    scoringMotor.move(scoringPower);
-
-}
-
-void smartIntake(int intakePower) {
-    // get_efficiency() returns 0-100. Lower means the motor is struggling/stalled.
-    // get_current_draw() returns mA. Higher means it's working harder.
+    scoringPiston.extend();
+    wingPiston.extend();
+    bottomMotor.move(intakePower);
+    topMotor.move(intakePower);
     
-    if (intakeMotor.get_current_draw() > 2000) {
-        // We are likely jammed or pushing a heavy load
-        intakeMotor.move(-127); // Quick reverse to re-seat the Triball
-        pros::delay(100);
-        intakeMotor.move(intakePower);  // Power through
-    } else {
-        // Motor is spinning freely, no need to pulse
-        intakeMotor.move(intakePower);
+    //string is going to be attached to prevent blocks from feeding out.
+    //however, another piston (hood) may be required to perform this task
+}
+void setScoring(int scoringPower,  char goalSelection){
+    if (goalSelection == 'L'){
+        scoringPiston.extend();
+        wingPiston.retract();
+        bottomMotor.move(scoringPower);
+        topMotor.move(scoringPower);
     }
-}
-void pulse(){
+    else if (goalSelection == 'M'){
+        scoringPiston.retract();
+        bottomMotor.move(scoringPower);
+        topMotor.move(scoringPower);
+    }
     
-    intakeMotor.move(127);
+    //see comment above, if hood is included above, make sure to add logic here
+
+}
+
+void pulse(){ //possibly redundant function, due to the transition to S-Bot
+    
+    topMotor.move(127);
     pros::delay(250);
-    intakeMotor.move(-127);
+    topMotor.move(-127);
     pros::delay(100);
-    intakeMotor.move(127);
+    topMotor.move(127);
     pros::delay(250);
-    intakeMotor.move(-127);
+    topMotor.move(-127);
     pros::delay(100);
-    intakeMotor.move(127);
+    topMotor.move(127);
 
 
 

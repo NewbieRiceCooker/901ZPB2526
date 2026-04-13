@@ -25,8 +25,8 @@ extern lemlib::ControllerSettings angular_controller;
 
 extern lemlib::Chassis chassis;
 
-extern pros::Motor intakeMotor;
-extern pros::Motor scoringMotor;
+extern pros::Motor topMotor;
+extern pros::Motor bottomMotor;
 
 extern pros::Motor leftFrontMotor;
 extern pros::Motor leftBottomMotor;
@@ -35,9 +35,10 @@ extern pros::Motor rightFrontMotor;
 extern pros::Motor rightBottomMotor;
 extern pros::Motor rightTopMotor;
 
+extern pros::adi::Pneumatics scoringPiston;
+extern pros::adi::Pneumatics wingPiston;
 extern pros::adi::Pneumatics loaderPiston;
 extern pros::adi::Pneumatics middlePiston;
-extern pros::adi::Pneumatics wingPiston;
 
 extern int autonomousPreSet;
 

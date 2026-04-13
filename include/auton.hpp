@@ -1,11 +1,12 @@
 #include "main.h"
 
-void left7block();
-void left7lateblock();
+void left4plus3(); //possibly rename to 4+3
+void left7();
 void left4rush();
+void left7rush();
 void skillsAuton();
 void parkSkillsAuton();
-void right7alleylongblock();
+void right7();
+void right4plus3();
 void soloAWP();
 
-// hi mulawin

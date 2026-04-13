@@ -2,8 +2,8 @@
 #include "lemlib/api.hpp"
 #include "liblvgl/lvgl.h"
 
-pros::MotorGroup left_motors({-1, -2, -3}, pros::MotorGearset::blue); 
-pros::MotorGroup right_motors({8, 9, 10}, pros::MotorGearset::blue); 
+pros::MotorGroup left_motors({-4, -5, -6}, pros::MotorGearset::blue); 
+pros::MotorGroup right_motors({1, 2, 3}, pros::MotorGearset::blue); 
 
 lemlib::Drivetrain drivetrain(&left_motors,
     &right_motors,
@@ -12,13 +12,13 @@ lemlib::Drivetrain drivetrain(&left_motors,
     450, //RPM
     8); //horizontal drift
 
-pros::Imu imu(7); 
-pros::Rotation vertical_sensor(5); //TO DO: check the signs of the vertical sensor and the horizontal sensor, if moving in the positive diretion, and printing out negative values, make sure to reverse them
+pros::Imu imu(12); 
+pros::Rotation vertical_sensor(-11); //TO DO: check the signs of the vertical sensor and the horizontal sensor, if moving in the positive diretion, and printing out negative values, make sure to reverse them
 pros::Rotation horizontal_sensor(4);
 
-lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_sensor, lemlib::Omniwheel::NEW_275, -5.75);
+lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_sensor, lemlib::Omniwheel::NEW_2, -5.75);
     // vertical tracking wheel
-lemlib::TrackingWheel vertical_tracking_wheel(&vertical_sensor, lemlib::Omniwheel::NEW_275, -2.5); //last value is based on the tracking center from the middle
+lemlib::TrackingWheel vertical_tracking_wheel(&vertical_sensor, lemlib::Omniwheel::NEW_2, 0); //last value is based on the tracking center from the middle
 
 lemlib::OdomSensors sensors(&vertical_tracking_wheel, // vertical tracking wheel 1, set to null
                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
@@ -35,7 +35,7 @@ lemlib::ControllerSettings lateral_controller(10, // proportional gain (kP)
                                               350, // small error range timeout, in milliseconds
                                               2, // large error range, in inches
                                               500, // large error range timeout, in milliseconds
-                                              12 // maximum acceleration (slew)
+                                              0 // maximum acceleration (slew)
 );
 
 // angular PID controller
@@ -59,21 +59,23 @@ lemlib::Chassis chassis(drivetrain, // drivetrain settings
                         sensors // odometry sensors
 );
 
-pros::Motor intakeMotor(21,pros::v5::MotorGears::blue);
-pros::Motor scoringMotor(-6, pros::v5::MotorGears::blue);
+pros::Motor topMotor(13,pros::v5::MotorGears::blue); 
+pros::Motor bottomMotor(-14,pros::v5::MotorGears::blue); 
 
-pros::Motor leftFrontMotor(-1, pros::v5::MotorGears::blue);
-pros::Motor leftBottomMotor(-2, pros::v5::MotorGears::blue);
-pros::Motor leftTopMotor(-3, pros::v5::MotorGears::blue);
-pros::Motor rightFrontMotor(8, pros::v5::MotorGears::blue);
-pros::Motor rightBottomMotor(9, pros::v5::MotorGears::blue);
-pros::Motor rightTopMotor(10, pros::v5::MotorGears::blue);
+pros::Motor leftFrontMotor(-4, pros::v5::MotorGears::blue);
+pros::Motor leftBottomMotor(-5, pros::v5::MotorGears::blue);
+pros::Motor leftTopMotor(-6, pros::v5::MotorGears::blue);
+pros::Motor rightFrontMotor(1, pros::v5::MotorGears::blue);
+pros::Motor rightBottomMotor(2, pros::v5::MotorGears::blue);
+pros::Motor rightTopMotor(3, pros::v5::MotorGears::blue);
 
-pros::adi::Pneumatics middlePiston('A',true); 
+pros::adi::Pneumatics scoringPiston('C',true); 
 pros::adi::Pneumatics loaderPiston('B',false);
-pros::adi::Pneumatics wingPiston('C',false);
+pros::adi::Pneumatics wingPiston('G',false);
+pros::adi::Pneumatics middlePiston('A',false);
 
-int autonomousPreSet = 3;
+
+int autonomousPreSet = 4;
 
 
 lv_obj_t * labelCoords = NULL;
