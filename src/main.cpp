@@ -176,7 +176,8 @@ void autonomous() {
 		left4plus3();
 		break;
 		case 2:
-		left7rush();
+		//left7rush();
+        fastleft7();
 		break;
 
 		case 3:
@@ -184,7 +185,8 @@ void autonomous() {
 		break;
 
         case 4:
-        right7();
+        //right7();
+        fastright7();
         break;
 
 		case 8:
@@ -197,8 +199,8 @@ void autonomous() {
 
         case 99:
         chassis.setPose(0,0,0);
-        chassis.turnToHeading(180,10000);
-        //chassis.moveToPose(0,24,0,1000,{},false);
+        //chassis.turnToHeading(180,10000);
+        chassis.moveToPose(0,24,0,10000,{.minSpeed=80},false);
 
 		default:
 		break;

@@ -27,17 +27,17 @@ void setScoring(int scoringPower,  char goalSelection){
 
 }
 
-void pulse(){ //possibly redundant function, due to the transition to S-Bot
+void pulse(int scoringPower, char goalSelection){ //possibly redundant function, due to the transition to S-Bot
+    if (goalSelection == 'L'){
+        topMotor.move(-127);
+        bottomMotor.move(-127);
+        pros::delay(250);
+        scoringPiston.extend();
+        wingPiston.retract();
+        topMotor.move(scoringPower);
+        bottomMotor.move(scoringPower);
+    }
     
-    topMotor.move(127);
-    pros::delay(250);
-    topMotor.move(-127);
-    pros::delay(100);
-    topMotor.move(127);
-    pros::delay(250);
-    topMotor.move(-127);
-    pros::delay(100);
-    topMotor.move(127);
 
 
 

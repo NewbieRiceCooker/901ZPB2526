@@ -3,40 +3,57 @@
 #include "globals.hpp"
 
 void left4plus3(){
-    
+    setIntake(127);
     chassis.setPose(57.5,22,-90);
     loaderPiston.toggle();
-    chassis.moveToPose(28,22,-90,800,{.maxSpeed=127},false);
+    chassis.moveToPose(28,22,-90,800,{},false);
     
-    chassis.turnToHeading(180,500,{.maxSpeed=127},false);
+    chassis.turnToHeading(180,500,{},false);
+    double truePosition = rightSensor.get();
+    truePosition = truePosition / 25.4;
+    truePosition = 0 + (truePosition + sensorOffset);
     
-    setIntake(127);
-    chassis.moveToPose(26,0,180,1250,{.maxSpeed=127},false);
-    chassis.moveToPose(26,50,180,1000,{.forwards=false,.maxSpeed=127},false);
+    chassis.moveToPose(truePosition-2,0,180,1000,{},false);
+    chassis.moveToPose(truePosition-2,42,180,800,{.forwards=false},false);
+    chassis.moveToPose(truePosition-2,42,180,800,{.forwards=false},true);
     loaderPiston.toggle();
-    setScoring(127,'L');
-    pros::delay(600);
+    pulse(127,'L');
+    pros::delay(1000);
     setIntake(127);
-    //chassis.moveToPose(26,30,180,1000,{.maxSpeed=127},false);
+     
+    
+   
+    chassis.moveToPose(truePosition-2,30,180,500,{.maxSpeed=127},false);
     chassis.swingToHeading(90, DriveSide::LEFT, 500, {.maxSpeed=127},false);
-    chassis.moveToPose(47,44,-312,1000,{.maxSpeed=127},false);
+    chassis.moveToPose(truePosition+22,41,-317,1100,{},false);
+   
     
     
-
+    loaderPiston.toggle();
     
-
     chassis.turnToHeading(-134,500);
     
-    chassis.moveToPose(68,60,-134,1000,{.forwards=false,.maxSpeed=127},false);
+    chassis.moveToPose(truePosition+41,56,-134,1000,{.forwards=false,.maxSpeed=127},false);
     
+     
     setScoring(127,'M');
     pros::delay(600);
     setScoring(0,'M');
-    chassis.moveToPose(40,26,-141,1000,{},false);
+   
+    /*chassis.moveToPose(truePosition+38,48,-134,1000,{.maxSpeed=127},false);
+    middlePiston.toggle();
+    chassis.moveToPose(truePosition+41,56,-134,500,{.forwards=false,.maxSpeed=127},false);
+    */
     
-    chassis.moveToPose(40,55,180,2000,{.forwards=false},false);
+    chassis.moveToPose(truePosition+11,26,-141,1000,{},false);
+    
+    wingPiston.retract();
+    loaderPiston.toggle();
+    chassis.moveToPose(truePosition+11.5,60,180,2000,{.forwards=false},false);
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     chassis.cancelAllMotions();
+    
+    
     
     
     
@@ -62,31 +79,104 @@ void left4rush(){
     chassis.moveToPose(35.5,50,180,2000,{.forwards=false},false);
 }
 void left7rush(){ //devin code try testing later
-    chassis.setPose(57.5,22,90);
-    //chassis.moveToPose()
+    chassis.setPose(57.5,22,0);
+    setIntake(127);
+    
+    chassis.moveToPose(49,50,-27,950,{},false);
+    loaderPiston.toggle();
+    pros::delay(200);
+    
+    
+    chassis.turnToHeading(-133,500);
+    
+    chassis.moveToPose(23, 24, -133, 1000, {}, false);
+    
+    chassis.turnToHeading(180,500,{},false);
+  
+
+    double truePosition = rightSensor.get();
+    truePosition = truePosition / 25.4;
+    truePosition = 0 + (truePosition + sensorOffset);
+    chassis.setPose(truePosition, 30, 180);
+
+    chassis.moveToPose(truePosition, 8, 180, 1000, {}, false);
+    
+    chassis.moveToPose(truePosition-2, 52, 180, 2000, {.forwards=false,.maxSpeed=80},true); //long goal
+    pros::delay(1000);
+    pulse(127, 'L');
+    loaderPiston.toggle();
+    pros::delay(1500);
+    chassis.moveToPose(truePosition-2, 35, 180, 750, {}, false);
+    chassis.moveToPose(truePosition+8, 46, 211, 500, {.forwards=false}, false); //change these to true
+    chassis.moveToPose(truePosition+8, 74, 180, 4000, {.forwards=false}, false); ////change these to true
+
+    /*
+    chassis.setPose(92,28,0);
+    setIntake(127);
+    chassis.moveToPose(100,50,42,950,{},false); //1250
+    loaderPiston.toggle();
+    pros::delay(200);
+    
+    
+    chassis.turnToHeading(133,500);
+    
+    chassis.moveToPose(128, 30, 133, 1000, {}, false);
+    chassis.turnToHeading(180,500,{},false);
+
+    double truePosition = rightSensor.get();
+    truePosition = truePosition / 25.4;
+    truePosition = 144 - (truePosition - sensorOffset);
+    chassis.setPose(truePosition, 30, 180);
+
+    chassis.moveToPose(truePosition, 17, 180, 1000, {}, false);
+    
+    chassis.moveToPose(truePosition+2, 52, 180, 2000, {.forwards=false,.maxSpeed=80},true); //long goal
+
+
+    pros::delay(1250);
+    pulse(127, 'L');
+    loaderPiston.toggle();
+    pros::delay(1500);
+
+    chassis.moveToPose(truePosition+2, 35, 180, 750, {}, false);
+    chassis.moveToPose(truePosition+12, 46, 211, 750, {.forwards=false}, false); //change these to true
+    chassis.moveToPose(truePosition+12, 74, 180, 4000, {.forwards=false}, false); ////change these to true
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
+    chassis.cancelAllMotions();*/
+
 }
 void right7(){ //still requires retuning
     
     chassis.setPose(92,28,0);
     setIntake(127);
-    chassis.moveToPose(100,50,42,1250,{},false);
-    
+    chassis.moveToPose(100,50,42,950,{},false); //1250
     loaderPiston.toggle();
     pros::delay(200);
     
-    chassis.turnToHeading(133,500);
-    chassis.moveToPose(129, 30, 133, 1500, {}, false);
-    chassis.turnToHeading(180,500);
     
-    chassis.moveToPose(130, 17, 180, 1000, {}, false);
-    chassis.moveToPose(129, 52, 180, 1500, {.forwards=false}, false);
-    setScoring(127, 'L');
+    chassis.turnToHeading(133,500);
+    
+    chassis.moveToPose(128, 30, 133, 1000, {}, false);
+    chassis.turnToHeading(180,500,{},false);
+
+    double truePosition = leftSensor.get();
+    truePosition = truePosition / 25.4;
+    truePosition = 144 - (truePosition - sensorOffset);
+    chassis.setPose(truePosition, 30, 180);
+
+    chassis.moveToPose(truePosition, 17, 180, 1000, {}, false);
+    
+    chassis.moveToPose(truePosition+2, 52, 180, 2000, {.forwards=false,.maxSpeed=80},true); //long goal
+
+
+    pros::delay(1250);
+    pulse(127, 'L');
     loaderPiston.toggle();
     pros::delay(1500);
 
-    chassis.moveToPose(129, 20, 180, 500, {}, false);
-    chassis.moveToPose(136, 36, 211, 500, {.forwards=false}, false); //change these to true
-    chassis.moveToPose(136, 69, 180, 4000, {.forwards=false}, false); ////change these to true
+    chassis.moveToPose(truePosition+2, 35, 180, 750, {}, false);
+    chassis.moveToPose(truePosition+12, 46, 211, 750, {.forwards=false}, false); //change these to true
+    chassis.moveToPose(truePosition+12, 74, 180, 4000, {.forwards=false}, false); ////change these to true
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     chassis.cancelAllMotions();
     
@@ -94,9 +184,9 @@ void right7(){ //still requires retuning
     
     
     
+    
 }
 void right4plus3(){
-
     chassis.setPose(92,22,90);
     loaderPiston.toggle();
     chassis.moveToPose(124,22,90,1000,{},false); //towards loader
@@ -115,20 +205,18 @@ void right4plus3(){
     chassis.swingToHeading(310, DriveSide::RIGHT, 500, {.maxSpeed=127},false);
 
 
-    chassis.moveToPose(102,40,310,1000, {}, false); //3 block
+    chassis.moveToPose(102,43,310,1000, {}, false); //3 block
     
-    chassis.moveToPose(84,53,310,1000,{}, true); //align bottom
-    /*
-    pros::delay(500);
+    chassis.moveToPose(85,59,310,1000,{}, false); //align bottom
     setIntake(-127);
-    pros::delay(1000);
+    pros::delay(1500);
     setIntake(127);
     
     chassis.moveToPose(110,38,310,1000,{.forwards=false}, false); //align long goal
     wingPiston.retract();
-    chassis.moveToPose(110,63,0,1000, {}, false); //push
+    chassis.moveToPose(110,63,0,1250, {}, false); //push
     chassis.turnToHeading(320,1000,{},false);
-    */
+    
     
     
     
@@ -239,6 +327,7 @@ void parkSkillsAuton(){
 }
 void soloAWP(){
 
+
     chassis.setPose(72, 28.5, -90);
     wingPiston.toggle();
     //chassis.moveToPoint(60, 28.5,300,{},false); 
@@ -292,5 +381,124 @@ void soloAWP(){
     
     
     
+
+}
+void fastright7(){
+    chassis.setBrakeMode(MOTOR_BRAKE_BRAKE);
+    chassis.setPose(92,28,0);
+    setIntake(127);
+    chassis.moveToPose(102,50,42,600,{.minSpeed=110},false); //1250
+    loaderPiston.toggle();
+    pros::delay(100);
+    
+    
+    chassis.moveToPose(128, 15, 180, 1750, {.minSpeed=110}, false);
+    chassis.moveToPose(128, 0, 180, 1000, {.minSpeed=60}, false);
+    double truePosition = leftSensor.get();
+    truePosition = truePosition / 25.4;
+    truePosition = 144 - (truePosition - sensorOffset);
+    chassis.setPose(truePosition, 0, 180);
+
+    chassis.moveToPose(truePosition,52,180, 1000,{.forwards=false,.minSpeed=80},false);
+    chassis.moveToPose(truePosition,52,180, 1000,{.forwards=false,.minSpeed=80},true);
+    pulse(127, 'L');
+    loaderPiston.toggle();
+    pros::delay(1500);
+    chassis.moveToPose(truePosition, 15, 180, 1000, {.minSpeed=70}, false);
+    chassis.moveToPose(truePosition+12, 30, 211, 750, {.forwards=false}, false); //change these to true
+    chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
+    chassis.moveToPose(truePosition+12, 64, 180, 9000, {.forwards=false,.lead=0.1}, false); ////change these to true
+
+    
+   /*
+    
+    
+    chassis.turnToHeading(133,500);
+    
+    chassis.moveToPose(128, 30, 133, 1000, {}, false);
+    chassis.turnToHeading(180,500,{},false);
+
+    double truePosition = leftSensor.get();
+    truePosition = truePosition / 25.4;
+    truePosition = 144 - (truePosition - sensorOffset);
+    chassis.setPose(truePosition, 30, 180);
+
+    chassis.moveToPose(truePosition, 17, 180, 1000, {}, false);
+    
+    chassis.moveToPose(truePosition+2, 52, 180, 2000, {.forwards=false,.maxSpeed=80},true); //long goal
+
+
+    pros::delay(1250);
+    pulse(127, 'L');
+    loaderPiston.toggle();
+    pros::delay(1500);
+
+    chassis.moveToPose(truePosition+2, 35, 180, 750, {}, false);
+    chassis.moveToPose(truePosition+12, 46, 211, 750, {.forwards=false}, false); //change these to true
+    chassis.moveToPose(truePosition+12, 74, 180, 4000, {.forwards=false}, false); ////change these to true
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
+    chassis.cancelAllMotions();
+    */
+}
+void fastleft7(){
+    chassis.setBrakeMode(MOTOR_BRAKE_BRAKE);
+    chassis.setPose(57.5,22,0);
+    setIntake(127);
+    
+    chassis.moveToPose(49,50,-27,600,{.minSpeed=110},false);
+    loaderPiston.toggle();
+    pros::delay(100);
+    chassis.moveToPose(25, 10, -180, 1750, {.minSpeed=110}, false);
+    chassis.turnToHeading(180,250);
+    chassis.moveToPose(25, 0, -180, 750, {.minSpeed=80}, false);
+    double truePosition = rightSensor.get();
+    truePosition = truePosition / 25.4;
+    truePosition = 0 + (truePosition + sensorOffset);
+    chassis.setPose(truePosition, 0, 180);
+
+
+    chassis.moveToPose(truePosition, 52, 180, 2000, {.forwards=false,.maxSpeed=80,.minSpeed=80,},true); //long goal
+    pros::delay(1000);
+    pulse(127, 'L');
+    loaderPiston.toggle();
+    pros::delay(1500);
+    chassis.moveToPose(truePosition, 15, 180, 750, {.minSpeed=70}, false);
+    chassis.moveToPose(truePosition+8, 20, 211, 500, {.forwards=false}, false); //change these to true
+    chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
+    chassis.moveToPose(truePosition+8, 47, 180, 9000, {.forwards=false, .minSpeed=80}, false); ////change these to true
+
+
+    /*
+    chassis.setPose(57.5,22,0);
+    setIntake(127);
+    
+    chassis.moveToPose(49,50,-27,950,{},false);
+    loaderPiston.toggle();
+    pros::delay(200);
+    
+    
+    chassis.turnToHeading(-133,500);
+    
+    chassis.moveToPose(23, 24, -133, 1000, {}, false);
+    
+    chassis.turnToHeading(180,500,{},false);
+  
+
+    double truePosition = rightSensor.get();
+    truePosition = truePosition / 25.4;
+    truePosition = 0 + (truePosition + sensorOffset);
+    chassis.setPose(truePosition, 30, 180);
+
+    chassis.moveToPose(truePosition, 8, 180, 1000, {}, false);
+    
+    chassis.moveToPose(truePosition-2, 52, 180, 2000, {.forwards=false,.maxSpeed=80},true); //long goal
+    pros::delay(1000);
+    pulse(127, 'L');
+    loaderPiston.toggle();
+    pros::delay(1500);
+    chassis.moveToPose(truePosition-2, 35, 180, 750, {}, false);
+    chassis.moveToPose(truePosition+8, 46, 211, 500, {.forwards=false}, false); //change these to true
+    chassis.moveToPose(truePosition+8, 74, 180, 4000, {.forwards=false}, false); ////change these to true
+    */
 
 }

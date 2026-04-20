@@ -40,6 +40,9 @@ extern pros::adi::Pneumatics wingPiston;
 extern pros::adi::Pneumatics loaderPiston;
 extern pros::adi::Pneumatics middlePiston;
 
+extern pros::Distance rightSensor;
+extern pros::Distance leftSensor;
+
 extern int autonomousPreSet;
 
 extern lv_obj_t * autonomousSubtitle;
@@ -53,5 +56,7 @@ extern lv_obj_t * countdownLabel;
 extern int autonState;       // 0: Idle, 1: Countdown, 2: Running
 extern int countdownValue;   // The 3-2-1 before start
 extern int gameTimer;        // The match/skills clock
+
+extern double sensorOffset;
 
 

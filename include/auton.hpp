@@ -8,5 +8,7 @@ void skillsAuton();
 void parkSkillsAuton();
 void right7();
 void right4plus3();
-void soloAWP();
+void fastright7();
+void fastleft7();
+;void soloAWP();
 

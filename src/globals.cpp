@@ -74,8 +74,10 @@ pros::adi::Pneumatics loaderPiston('B',false);
 pros::adi::Pneumatics wingPiston('G',false);
 pros::adi::Pneumatics middlePiston('A',false);
 
+pros::Distance rightSensor(8);
+pros::Distance leftSensor(15);
 
-int autonomousPreSet = 4;
+int autonomousPreSet = 1;
 
 
 lv_obj_t * labelCoords = NULL;
@@ -91,5 +93,5 @@ lv_obj_t * countdownLabel = NULL;
 int autonState = 0;       // 0: Idle, 1: Countdown, 2: Running
 int gameTimer = 0;        // The match/skills clock
 
-
+double sensorOffset = 7;
 

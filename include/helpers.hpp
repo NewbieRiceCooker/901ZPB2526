@@ -3,4 +3,4 @@
 void setIntake(int intakePower);
 void setScoring(int scoringPower, char goalSelection);
 void smartIntake(int intakePower);
-void pulse();
+void pulse(int scoringPower, char goalSelection);
