@@ -77,7 +77,7 @@ pros::adi::Pneumatics middlePiston('A',false);
 pros::Distance rightSensor(8);
 pros::Distance leftSensor(15);
 
-int autonomousPreSet = 1;
+int autonomousPreSet = 3;
 
 
 lv_obj_t * labelCoords = NULL;

@@ -200,7 +200,7 @@ void autonomous() {
         case 99:
         chassis.setPose(0,0,0);
         //chassis.turnToHeading(180,10000);
-        chassis.moveToPose(0,24,0,10000,{.minSpeed=80},false);
+        chassis.moveToPose(0,5,0,10000,{.minSpeed=80},false);
 
 		default:
 		break;
@@ -255,12 +255,9 @@ void opcontrol() {
 		right_mg.move(dir - turn);                     // Sets right motor voltage
 		pros::delay(20);                               // Run for 20 ms then update
 
-		//intake code
+		
 
 		
-		int intakePower = 0;
-		int scoringPower = 0;
-
 		// --- 1. INDEPENDENT SCORING LOGIC (L1 or L2) ---
 		if (master.get_digital(DIGITAL_L1)) { //middle goal score
 			topMotor.move(127);
